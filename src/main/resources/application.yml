@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: orders
+  server:
+    port: 8080
+  datasource:
+    url: jdbc:mysql://localhost:3306/katas
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
