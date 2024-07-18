@@ -38,10 +38,6 @@ public class OrdersFileServiceImpl implements OrdersFileService {
                     .map(ordersMapper::ordersToOrderDTO)
                     .toList();
 
-            if (ordersDtoList.isEmpty()) {
-                throw new FileException("No se encontraron registros de pedidos en la base de datos");
-            }
-
             log.info("Obtenidos {} registros de pedidos de la base de datos", ordersDtoList.size());
             return ordersFileMethods.generateOrderFileCSV(ordersDtoList, FILENAME);
         } catch (Exception e) {

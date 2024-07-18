@@ -1,23 +1,24 @@
 package com.consum.orders.domain.service.file;
 
 import com.consum.orders.application.model.OrdersFileResponse;
-import com.consum.orders.domain.exception.ProcessingException;
-import com.consum.orders.domain.exception.FileException;
 import com.consum.orders.domain.dto.OrdersDTO;
+import com.consum.orders.domain.exception.FileException;
+import com.consum.orders.domain.exception.ProcessingException;
 import com.consum.orders.domain.mapper.OrdersMapper;
 import com.consum.orders.domain.utils.OrdersFileMethods;
 import com.consum.orders.infrastructure.database.entity.Orders;
 import com.consum.orders.infrastructure.service.OrdersRepositoryService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class OrdersFileServiceImplTest {
 
     private static final String FILENAME_ORDERS_DB = "orders_file";
@@ -41,27 +43,18 @@ public class OrdersFileServiceImplTest {
     @InjectMocks
     private OrdersFileServiceImpl orderFileService;
 
-    private AutoCloseable closeable;
-
     private Orders orders;
     private OrdersDTO ordersDTO;
 
     private OrdersFileResponse ordersFileResponse;
 
-
     @BeforeEach
     public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
 
         orders = createOrders();
         ordersDTO = createOrderDTO();
 
         ordersFileResponse = createOrderFileResponse();
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
     }
 
     @Test
@@ -90,6 +83,7 @@ public class OrdersFileServiceImplTest {
         verify(ordersMapper, never()).ordersToOrderDTO(orders);
         verify(ordersFileMethods, never()).generateOrderFileCSV(List.of(ordersDTO), FILENAME_ORDERS_DB);
     }
+
 
     /**
      * Builder Orders

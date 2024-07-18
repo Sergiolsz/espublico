@@ -10,12 +10,12 @@ import com.consum.orders.infrastructure.client.dto.ContentLinksDTO;
 import com.consum.orders.infrastructure.client.dto.LinksClientDTO;
 import com.consum.orders.infrastructure.client.dto.PaginatedOrderClientDTO;
 import com.consum.orders.infrastructure.database.entity.Orders;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class OrdersMethodsTest {
 
     @InjectMocks
@@ -38,8 +39,6 @@ class OrdersMethodsTest {
     @Mock
     private OrdersValidations ordersValidations;
 
-    private AutoCloseable closeable;
-
     private Orders orders;
     private OrdersDTO ordersDTO;
     private ContentClientDTO contentClientDTO;
@@ -47,17 +46,11 @@ class OrdersMethodsTest {
 
     @BeforeEach
     void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
 
         orders = createOrders();
         ordersDTO = createOrderDTO();
         contentClientDTO = createContentClientDTO();
         paginatedOrderClientDTO = createPaginatedOrderClientDTO();
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
     }
 
     @Test

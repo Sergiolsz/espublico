@@ -6,12 +6,12 @@ import com.consum.orders.application.model.SummaryResponse;
 import com.consum.orders.domain.dto.OrdersDTO;
 import com.consum.orders.domain.dto.SummaryDTO;
 import com.consum.orders.domain.service.api.OrdersService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,6 +22,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class OrdersControllerTest {
 
     private static final String PAGE = "1";
@@ -34,24 +35,16 @@ public class OrdersControllerTest {
     @InjectMocks
     private OrdersController ordersController;
 
-    private AutoCloseable closeable;
-
     private OrdersListResponse ordersListResponse;
     private OrdersSingleResponse ordersSingleResponse;
     private SummaryResponse summaryResponse;
 
     @BeforeEach
     public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
 
         summaryResponse = SummaryResponse.builder().summary(createSummaryDTO()).build();
         ordersSingleResponse = OrdersSingleResponse.builder().order(createOrderDTO()).build();
         ordersListResponse = OrdersListResponse.builder().orders(List.of(createOrderDTO())).build();
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
     }
 
     @Test

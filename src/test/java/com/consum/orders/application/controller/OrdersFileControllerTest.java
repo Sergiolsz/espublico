@@ -5,9 +5,11 @@ import com.consum.orders.domain.service.file.OrdersFileService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +20,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class OrdersFileControllerTest {
 
     @Mock
@@ -25,18 +28,6 @@ public class OrdersFileControllerTest {
 
     @InjectMocks
     private OrdersFileController ordersFileController;
-
-    private AutoCloseable closeable;
-
-    @BeforeEach
-    public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
-    }
 
     @Test
     void testGenerateAndDownloadCSV() {
