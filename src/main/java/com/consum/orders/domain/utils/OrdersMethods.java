@@ -120,12 +120,9 @@ public class OrdersMethods {
             log.info("Conversión procesada correctamente para ID: {}", contentClientDTO.getId());
 
             return orders;
-        } catch (InvalidException e) {
-            log.error("Error en la validación de datos para order ID: {}. Mensaje: {}", contentClientDTO.getId(), e.getMessage(), e);
-            throw new ProcessingException("Error en la validación de datos para el order id: " + contentClientDTO.getId(), e);
-        } catch (Exception e) {
-            log.error("Error inesperado al procesar order ID: {}. Mensaje: {}", contentClientDTO.getId(), e.getMessage(), e);
-            throw new ProcessingException("Error inesperado al procesar el order id: " + contentClientDTO.getId(), e);
+        } catch (Exception exception) {
+            log.error("Error en la validación de datos para order ID: {}. Mensaje: {}", contentClientDTO.getId(), exception.getMessage(), exception);
+            throw new ProcessingException("Error en la validación de datos para el order id: " + contentClientDTO.getId(), exception);
         }
     }
 
