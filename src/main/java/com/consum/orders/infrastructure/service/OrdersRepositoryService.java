@@ -31,7 +31,7 @@ public class OrdersRepositoryService {
     public void saveAllOrders(List<Orders> ordersList) {
         try {
             log.info("Intentando guardar {} pedidos", ordersList.size());
-            var a = ordersRepository.saveAll(ordersList);
+            ordersRepository.saveAll(ordersList);
             log.info("Pedidos guardados correctamente: {}", ordersList.size());
         } catch (Exception exception) {
             log.error("Error en el proceso de guardar los pedidos en la base de datos", exception);

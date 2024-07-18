@@ -26,9 +26,8 @@ public class OrdersValidations {
      * @param dateString Fecha en formato "dd/MM/yyyy".
      * @param fieldName  Nombre del campo de fecha.
      * @param id         Identificador asociado del objeto JSON.
-     * @throws ParseException Si la cadena de fecha es nula, vacía o no tiene el formato esperado.
      */
-    public void validateParseDate(String dateString, String fieldName, String id) throws ParseException {
+    public void validateParseDate(String dateString, String fieldName, String id) {
         try {
             dateFormat.parse(dateString);
         } catch (ParseException e) {
@@ -44,9 +43,8 @@ public class OrdersValidations {
      * @param fieldValue Valor de la cadena a validar.
      * @param fieldName  Nombre del campo para el mensaje de la excepción.
      * @param id         Identificador asociado del objeto JSON.
-     * @throws ParseException Si la cadena es nula o está vacía.
      */
-    public void validateStringNotEmpty(String fieldValue, String fieldName, String id) throws ParseException {
+    public void validateStringNotEmpty(String fieldValue, String fieldName, String id) {
         if (!StringUtils.hasText(fieldValue)) {
             String errorMessage = String.format("Campo: %s vacío o nulo, id: %s", fieldName, id);
             log.error(errorMessage);
@@ -60,9 +58,8 @@ public class OrdersValidations {
      * @param fieldValue Número a validar.
      * @param fieldName  Nombre del campo para el mensaje de excepción.
      * @param id         Identificador asociado para el mensaje de excepción.
-     * @throws ParseException Si el número es nulo o no es positivo.
      */
-    public void validatePositiveNumber(Number fieldValue, String fieldName, String id) throws ParseException {
+    public void validatePositiveNumber(Number fieldValue, String fieldName, String id) {
         if (fieldValue == null || fieldValue.doubleValue() <= 0) {
             String errorMessage = String.format("Invalid positive number for field: %s, id: %s", fieldName, id);
             log.error(errorMessage);
@@ -74,9 +71,8 @@ public class OrdersValidations {
      * Valida los campos del ContentClientDTO antes de realizar el mapeo a la entidad Order.
      *
      * @param contentClientDTO DTO que contiene la información de la orden.
-     * @throws ParseException Si algún dato no pasa las validaciones.
      */
-    public void validateContentClientDTO(ContentClientDTO contentClientDTO) throws ParseException {
+    public void validateContentClientDTO(ContentClientDTO contentClientDTO)  {
         String id = contentClientDTO.getId() != null ? contentClientDTO.getId() : "unknown";
         validateStringNotEmpty(contentClientDTO.getUuid(), "uuid", id);
         validateStringNotEmpty(contentClientDTO.getId(), "id", id);

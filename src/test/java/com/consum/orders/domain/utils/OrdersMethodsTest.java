@@ -1,8 +1,9 @@
 package com.consum.orders.domain.utils;
 
-import com.consum.orders.domain.exception.ProcessingException;
 import com.consum.orders.domain.dto.OrdersDTO;
 import com.consum.orders.domain.dto.SummaryDTO;
+import com.consum.orders.domain.exception.InvalidException;
+import com.consum.orders.domain.exception.ProcessingException;
 import com.consum.orders.domain.mapper.OrdersMapper;
 import com.consum.orders.infrastructure.client.dto.ContentClientDTO;
 import com.consum.orders.infrastructure.client.dto.ContentLinksDTO;
@@ -17,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +42,7 @@ class OrdersMethodsTest {
 
     private Orders orders;
     private OrdersDTO ordersDTO;
+    private ContentClientDTO contentClientDTO;
     private PaginatedOrderClientDTO paginatedOrderClientDTO;
 
     @BeforeEach
@@ -50,6 +51,7 @@ class OrdersMethodsTest {
 
         orders = createOrders();
         ordersDTO = createOrderDTO();
+        contentClientDTO = createContentClientDTO();
         paginatedOrderClientDTO = createPaginatedOrderClientDTO();
     }
 
@@ -59,7 +61,8 @@ class OrdersMethodsTest {
     }
 
     @Test
-    void convertToOrders_whenPaginatedOrderClientDTOIsValid_shouldReturnListOfOrders() throws ParseException {
+    void convertToOrders_whenPaginatedOrderClientDTOIsValid_shouldReturnListOfOrders() {
+
         when(ordersMapper.contentClientDTOToOrders(any(ContentClientDTO.class))).thenReturn(orders);
         doNothing().when(ordersValidations).validateContentClientDTO(any(ContentClientDTO.class));
 
@@ -79,6 +82,16 @@ class OrdersMethodsTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(ordersDTO.getOrderId(), result.get(0).getOrderId());
+    }
+
+    @Test
+    void convertContentClientDTOToOrderDTO_whenContentClientDTOIsValid_shouldReturnOrdersDTO() {
+        when(ordersMapper.contentClientDTOToOrderDTO(contentClientDTO)).thenReturn(ordersDTO);
+
+        OrdersDTO result = ordersMethods.convertContentClientDTOToOrderDTO(contentClientDTO);
+
+        assertNotNull(result);
+        assertEquals(contentClientDTO.getId(), result.getOrderId());
     }
 
     @Test
@@ -108,6 +121,25 @@ class OrdersMethodsTest {
                 () -> ordersMethods.generateOrderSummary(new ArrayList<>()));
 
         assertEquals("La lista de pedidos no puede ser vacía.", exception.getMessage());
+    }
+
+    @Test
+    public void testConvertToOrders_HandleInvalidDateFormatException() {
+        ContentClientDTO contentClientDTOError = createInvalidContentClientDTO();
+
+        PaginatedOrderClientDTO paginatedOrderClientDTOError = new PaginatedOrderClientDTO(1, List.of(contentClientDTOError), null);
+
+        String errorMessage = String.format("Error en la validación de datos para el order id: %s",
+                paginatedOrderClientDTOError.getContent().get(0).getId());
+
+        when(ordersMethods.convertToOrders(paginatedOrderClientDTOError))
+                .thenThrow(new InvalidException.InvalidDateFormatException(errorMessage,
+                        new RuntimeException()));
+
+        ProcessingException exception = assertThrows(ProcessingException.class,
+                () -> ordersMethods.convertToOrders(paginatedOrderClientDTOError));
+
+        assertEquals(errorMessage, exception.getMessage());
     }
 
     /**
@@ -143,7 +175,7 @@ class OrdersMethodsTest {
      */
     private static OrdersDTO createOrderDTO() {
         return OrdersDTO.builder()
-                .orderId("1001")
+                .orderId("123456")
                 .orderPriority("H")
                 .orderDate(new Date())
                 .region("North America")
@@ -186,6 +218,30 @@ class OrdersMethodsTest {
                 2750.00,
                 contentLinksDTO
         );
+    }
+
+    /**
+     * ContentClientDTO para prueba de error
+     *
+     * @return ContentClientDTO
+     */
+    private ContentClientDTO createInvalidContentClientDTO() {
+        return new ContentClientDTO("123",
+                "123456",
+                "North America",
+                "USA",
+                "Electronics",
+                "Online",
+                "H",
+                "invalid_date_format",
+                "01/02/2023",
+                100,
+                50.0,
+                30.0,
+                5000.0,
+                3000.0,
+                2000.0,
+                null);
     }
 
     /**
