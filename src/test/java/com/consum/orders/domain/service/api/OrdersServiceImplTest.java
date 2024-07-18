@@ -13,12 +13,12 @@ import com.consum.orders.infrastructure.client.dto.PaginatedOrderClientDTO;
 import com.consum.orders.infrastructure.database.entity.Orders;
 import com.consum.orders.infrastructure.service.OrdersClientService;
 import com.consum.orders.infrastructure.service.OrdersRepositoryService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class OrdersServiceImplTest {
 
     private static final String PAGE = "1";
@@ -48,8 +49,6 @@ public class OrdersServiceImplTest {
     @InjectMocks
     private OrdersServiceImpl ordersService;
 
-    private AutoCloseable closeable;
-
     private OrdersDTO ordersDTO;
     private SummaryDTO summaryDTO;
     private PaginatedOrderClientDTO paginatedOrderClientDTO;
@@ -64,7 +63,6 @@ public class OrdersServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
 
         Orders orders = createOrders();
         ordersDTO = createOrderDTO();
@@ -78,11 +76,6 @@ public class OrdersServiceImplTest {
         summaryResponse = SummaryResponse.builder().summary(summaryDTO).build();
         ordersSingleResponse = OrdersSingleResponse.builder().order(ordersDTO).build();
         ordersListResponse = OrdersListResponse.builder().orders(ordersDTOList).build();
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
     }
 
     @Test
@@ -107,7 +100,7 @@ public class OrdersServiceImplTest {
     }
 
     @Test
-    public void testGetOrder() {
+    public void testGetOrderByUUID() {
 
         when(ordersClientService.getOrderByUUIDClient(UUID)).thenReturn(contentClientDTO);
         when(ordersMethods.convertContentClientDTOToOrderDTO(contentClientDTO)).thenReturn(ordersDTO);
@@ -186,34 +179,6 @@ public class OrdersServiceImplTest {
     }
 
     /**
-     * Constructor ContentClientDTO
-     *
-     * @return ContentClientDTO
-     */
-    private static ContentClientDTO createContentClientDTO() {
-
-        ContentLinksDTO contentLinksDTO = new ContentLinksDTO("https://kata-espublicotech.g3stiona.com:443/v1/orders/1858f59d-8884-41d7-b4fc-88cfbbf00c53");
-
-        return new ContentClientDTO("ce288666-5618-4460-9e9a-0e62944850e2",
-                "123456",
-                "North America",
-                "United States",
-                "Electronics",
-                "Online",
-                "H",
-                "",
-                "",
-                50,
-                75.00,
-                20.00,
-                3750.00,
-                1000.00,
-                2750.00,
-                contentLinksDTO
-        );
-    }
-
-    /**
      * Builder SummaryDTO
      *
      * @return SummaryDTO
@@ -242,6 +207,35 @@ public class OrdersServiceImplTest {
                 .orderPrioritySummary(orderPrioritySummary)
                 .build();
     }
+
+    /**
+     * Constructor ContentClientDTO
+     *
+     * @return ContentClientDTO
+     */
+    private static ContentClientDTO createContentClientDTO() {
+
+        ContentLinksDTO contentLinksDTO = new ContentLinksDTO("https://kata-espublicotech.g3stiona.com:443/v1/orders/1858f59d-8884-41d7-b4fc-88cfbbf00c53");
+
+        return new ContentClientDTO("ce288666-5618-4460-9e9a-0e62944850e2",
+                "123456",
+                "North America",
+                "United States",
+                "Electronics",
+                "Online",
+                "H",
+                "",
+                "",
+                50,
+                75.00,
+                20.00,
+                3750.00,
+                1000.00,
+                2750.00,
+                contentLinksDTO
+        );
+    }
+
 
     /**
      * Builder PaginatedOrderClientDTO

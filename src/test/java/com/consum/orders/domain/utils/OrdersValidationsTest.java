@@ -5,35 +5,21 @@ import com.consum.orders.domain.exception.InvalidException.InvalidNumberValueExc
 import com.consum.orders.domain.exception.InvalidException.InvalidStringValueException;
 import com.consum.orders.infrastructure.client.dto.ContentClientDTO;
 import com.consum.orders.infrastructure.client.dto.ContentLinksDTO;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-
-import java.text.ParseException;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
 class OrdersValidationsTest {
 
     @InjectMocks
     private OrdersValidations ordersValidations;
 
-    private AutoCloseable closeable;
-
-    @BeforeEach
-    void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
-    }
-
     @Test
-    void validateParseDate_validDate_shouldNotThrowException() throws ParseException {
+    void validateParseDate_validDate_shouldNotThrowException() {
         String dateString = "15/07/2024";
         String fieldName = "date";
         String id = "123";
@@ -51,7 +37,7 @@ class OrdersValidationsTest {
     }
 
     @Test
-    void validateStringNotEmpty_validString_shouldNotThrowException() throws ParseException {
+    void validateStringNotEmpty_validString_shouldNotThrowException() {
         String fieldValue = "Test";
         String fieldName = "field";
         String id = "123";
@@ -69,7 +55,7 @@ class OrdersValidationsTest {
     }
 
     @Test
-    void validatePositiveNumber_positiveNumber_shouldNotThrowException() throws ParseException {
+    void validatePositiveNumber_positiveNumber_shouldNotThrowException() {
         Number fieldValue = 10;
         String fieldName = "field";
         String id = "123";
@@ -87,7 +73,7 @@ class OrdersValidationsTest {
     }
 
     @Test
-    void validateContentClientDTO_validContentClientDTO_shouldNotThrowException() throws ParseException {
+    void validateContentClientDTO_validContentClientDTO_shouldNotThrowException() {
         ContentClientDTO contentClientDTO = createValidContentClientDTO();
 
         ordersValidations.validateContentClientDTO(contentClientDTO);

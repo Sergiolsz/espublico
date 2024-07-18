@@ -24,6 +24,7 @@ class OrdersClientServiceTest {
 
     private static final String PAGE = "1";
     private static final String MAX_PER_PAGE = "100";
+    private static final String UUID = "1858f59d-8884-41d7-b4fc-88cfbbf00c53";
 
     @Mock
     private KatasClientFeign katasClientFeign;
@@ -31,10 +32,13 @@ class OrdersClientServiceTest {
     @InjectMocks
     private OrdersClientService ordersClientService;
 
+    private ContentClientDTO contentClientDTO;
     private PaginatedOrderClientDTO paginatedOrderClientDTO;
 
     @BeforeEach
     void setUp() {
+
+        contentClientDTO = createContentClientDTO();
         paginatedOrderClientDTO = createPaginatedOrderClientDTO();
     }
 
@@ -78,6 +82,48 @@ class OrdersClientServiceTest {
 
         verify(katasClientFeign, times(1)).getClientOrders(PAGE, MAX_PER_PAGE);
     }
+
+    @Test
+    void testGetOrdersByUUID_Client_Success() {
+
+        when(katasClientFeign.getClientOrderByUUID(UUID)).thenReturn(contentClientDTO);
+
+        ContentClientDTO result = ordersClientService.getOrderByUUIDClient(UUID);
+
+        assertNotNull(result);
+        assertEquals(result.getId(), contentClientDTO.getId());
+
+        verify(katasClientFeign, times(1)).getClientOrderByUUID(UUID);
+    }
+
+    /**
+     * Constructor ContentClientDTO
+     *
+     * @return ContentClientDTO
+     */
+    private static ContentClientDTO createContentClientDTO() {
+
+        ContentLinksDTO contentLinksDTO = new ContentLinksDTO("https://kata-espublicotech.g3stiona.com:443/v1/orders/1858f59d-8884-41d7-b4fc-88cfbbf00c53");
+
+        return new ContentClientDTO("ce288666-5618-4460-9e9a-0e62944850e2",
+                "123456",
+                "North America",
+                "United States",
+                "Electronics",
+                "Online",
+                "H",
+                "",
+                "",
+                50,
+                75.00,
+                20.00,
+                3750.00,
+                1000.00,
+                2750.00,
+                contentLinksDTO
+        );
+    }
+
 
     /**
      * Builder PaginatedOrderClientDTO

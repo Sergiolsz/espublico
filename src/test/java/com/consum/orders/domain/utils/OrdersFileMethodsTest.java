@@ -2,11 +2,10 @@ package com.consum.orders.domain.utils;
 
 import com.consum.orders.application.model.OrdersFileResponse;
 import com.consum.orders.domain.dto.OrdersDTO;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
@@ -18,22 +17,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class OrdersFileMethodsTest {
 
     @InjectMocks
     private OrdersFileMethods ordersFileMethods;
-
-    private AutoCloseable closeable;
-
-    @BeforeEach
-    public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
-    }
 
     @Test
     void testGenerateOrderFileCSV() throws IOException {

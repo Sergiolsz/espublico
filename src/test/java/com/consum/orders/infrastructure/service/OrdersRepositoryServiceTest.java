@@ -3,12 +3,12 @@ package com.consum.orders.infrastructure.service;
 import com.consum.orders.domain.exception.ProcessingException;
 import com.consum.orders.infrastructure.database.entity.Orders;
 import com.consum.orders.infrastructure.database.repository.OrdersRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class OrdersRepositoryServiceTest {
 
     @Mock
@@ -27,20 +28,11 @@ class OrdersRepositoryServiceTest {
     @InjectMocks
     private OrdersRepositoryService ordersRepositoryService;
 
-    private AutoCloseable closeable;
-
     private List<Orders> ordersList;
 
     @BeforeEach
     public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-
         ordersList = List.of(createOrders());
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
     }
 
     @Test
