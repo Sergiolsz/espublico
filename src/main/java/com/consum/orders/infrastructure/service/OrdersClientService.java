@@ -6,6 +6,7 @@ import com.consum.orders.infrastructure.client.dto.ContentClientDTO;
 import com.consum.orders.infrastructure.client.dto.PaginatedOrderClientDTO;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -27,6 +28,7 @@ public class OrdersClientService {
      * @throws ProcessingException Si ocurre un error al obtener las órdenes paginadas.
      *                             El mensaje de la excepción indicará que falló en la llamada al servicio externo.
      */
+    @Cacheable(value = "clientOrdersCache", key = "#page + '-' + #maxPerPage")
     public PaginatedOrderClientDTO getPagedOrdersClient(String page, String maxPerPage) {
         try {
             log.info("Llamando a getClientOrders con página={} y maxPerPage={}.", page, maxPerPage);
@@ -50,6 +52,7 @@ public class OrdersClientService {
      * @param uuid Identificador único del pedido
      * @return ContentClientDTO Datos del pedido
      */
+    @Cacheable(value = "clientOrderCache", key = "#uuid")
     public ContentClientDTO getOrderByUUIDClient(String uuid) {
         log.info("Llamando a getOrderClient con uuid={}.", uuid);
         ContentClientDTO contentClientDTO = katasClientFeign.getClientOrderByUUID(uuid);

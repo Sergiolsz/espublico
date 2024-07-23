@@ -7,6 +7,7 @@ import com.consum.orders.domain.service.api.OrdersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,9 +33,9 @@ public class OrdersController {
     @GetMapping("/import-summary")
     public SummaryResponse importAndSummarizeOrders(
             @Parameter(description = "Números de páginas para la petición", example = "1")
-            @RequestParam(defaultValue = "1") String page,
+            @RequestParam(defaultValue = "1") @Min(1) String page,
             @Parameter(description = "Máximo de pedidos por página", example = "100")
-            @RequestParam(defaultValue = "100") String maxPerPage) {
+            @RequestParam(defaultValue = "100") @Min(1) String maxPerPage) {
 
         return ordersService.importAndSummarizeOrders(page, maxPerPage);
     }

@@ -5,10 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContentClientDTO {
+public class ContentClientDTO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @JsonProperty("uuid")
     String uuid;

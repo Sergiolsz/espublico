@@ -4,12 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Value
 @Builder
-public class OrdersDTO {
+public class OrdersDTO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Schema(description = "ID único del pedido", example = "443368995")
     String orderId;

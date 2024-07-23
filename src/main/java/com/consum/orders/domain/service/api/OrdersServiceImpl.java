@@ -11,7 +11,10 @@ import com.consum.orders.infrastructure.database.entity.Orders;
 import com.consum.orders.infrastructure.service.OrdersClientService;
 import com.consum.orders.infrastructure.service.OrdersRepositoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    @CacheEvict(value = "orders", allEntries = true)
+    @Transactional
     public SummaryResponse importAndSummarizeOrders(String page, String maxPerPage) {
         log.info("Iniciando proceso de la petición de pedidos, página {}, máximo por página {}", page, maxPerPage);
 
@@ -58,6 +63,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    @Cacheable(value = "orders", key = "#uuid")
     public OrdersSingleResponse getOrderByUUID(String uuid) {
         log.info("Iniciando proceso de obtener un pedido por su UUID. Servicio: getOrdersByUUID");
 
@@ -72,6 +78,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    @Cacheable("orders")
     public OrdersListResponse getOrders() {
         log.info("Iniciando proceso de obtener todos los pedidos de la base de datos. Servicio: getAllOrders");
 
