@@ -8,6 +8,7 @@ import com.consum.orders.domain.mapper.OrdersMapper;
 import com.consum.orders.domain.utils.OrdersFileMethods;
 import com.consum.orders.infrastructure.service.OrdersRepositoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class OrdersFileServiceImpl implements OrdersFileService {
     }
 
     @Override
+    @Cacheable("orders")
     public OrdersFileResponse generateOrderFileCSV() throws ProcessingException {
         try {
             List<OrdersDTO> ordersDtoList = ordersRepositoryService.findAll()

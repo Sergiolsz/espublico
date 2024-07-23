@@ -4,11 +4,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 
 @Value
 @Builder
-public class SummaryDTO {
+public class SummaryDTO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Schema(description = "Resumen de pedidos por región", example = "{\"North America\": 10}")
     Map<String, Long> regionSummary;
